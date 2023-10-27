@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TF Stacker</title>
+  <link rel="stylesheet" href="style.css">
+  <script id="settings">
+    version = "0.1-web"
+  </script>
+  <script src="index.js" defer></script>
+</head>
+<body>
+
+<main id="scenes">
+  
+  <article class="active scene" id="loadingScene">
+    <div class="container">
+      <h1 class="fade">Loading...</h1>
+      <noscript><h3>Please enable JavaScript to continue!</h3></noscript>
+    </div>
+  </article>
+  
+  <article class="scene" id="mainMenuScene">
+    <div class="container">
+
+      <h1>TF stacker</h1>
+
+      <aside>
+        <p>Select character to load:</p><br>
+        <div id="characters">:3</div>
+      </aside>
+
+      <button type="button" onclick="switchScene('databaseScene')">
+        <h3>📂 Load local database</h3>
+      </button>
+
+    </div>
+  </article>
+
+  <article class="scene" id="databaseScene">
+    <div class="container">
+
+      <h3>Load a local database folder</h3>
+
+      <ol>
+        <li>Click the file button below</li>
+        <li>Navigate inside the database folder</li>
+        <li>Without selecting any further files or folders, press <q>Open</q> or <q>Upload</q></li>
+        <li>If asked by the browser, confirm the upload</li>
+      </ol>
+
+      <input type="file" id="databaseUpload" webkitdirectory="" directory="" onchange="readDatabase(event)">
+
+      <output id="databaseStats">Database not loaded</output>
+
+      <nav>
+        <button type="button" onclick="switchScene('mainMenuScene')"> ✅ Back to title screen </button>
+        <button id="unloadButton" disabled type="button" onclick="unloadDatabase()"> ❌ Unload database </button>
+      </nav>
+
+    </div>
+  </article>
+
+  <article class="scene" id="transformScene">
+
+    <aside>
+      <nav id="tfButtons"></nav>
+      <img class="tfButton disabled" id="undo" draggable="false" src="Assets/Sprites/Undo_Button.png">
+    </aside>
+
+    <section>
+      <img id="transformee" draggable="false">
+    </section>
+
+  </article>
+
+  <article class="scene" id="creditScene">
+    <div class="container">
+
+      <h3>Credits</h3>
+
+      <table>
+        <tr> <td>Original concept</td>
+          <td>DonHP</td> </tr>
+        <tr> <td>Example art</td>
+          <td>DonHP</td> </tr>
+        <tr> <td>Web port</td>
+          <td>Mato</td> </tr>
+        <!-- <tr> <td>Foley sounds</td>
+          <td>Celeste</td> </tr> -->
+      </table>
+
+      <button type="button" onclick="switchScene('previousScene')"> Back </button>
+
+    </div>
+  </article>
+
+</main>
+
+<footer>
+  <span id="versionText">Unknown version</span>
+  <a class="minor clickable" onclick="switchScene('creditScene')">Credits</a>
+  <button type="button" onclick="exit()">Exit</button>
+</footer>
+  
+<template id="dummy"></template>
+
+</body>
+</html>
