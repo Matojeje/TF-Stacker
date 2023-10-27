@@ -26,7 +26,13 @@ If you want to play the game, you'll first need to download the zip file of the 
 open the "TF Stacker" Unity application to run it! You'll need a database to actually play the game, though. You can find a demo database featuring Draden the 
 dragon and two different transformations in the Databases folder. Just download the zip for that, unzip it, copy its directory path (located near the top of the file explorer), and paste that into the dialogue box on the startup screen. The game will warn you of any issues with the database when you press start, though if you downloaded the demo database and didn't modify it at all then it should be fine so long as the path is correct. From there, you can press the buttons along the top of the screen to transform the character, and use the undo button at the top-right to undo the most recent transformation!
 
-An example of a correct directory path would be something like: "C:\Users\<User>\Documents\<DatabaseFolder>"
+If you're having trouble finding where to download the files from the GitHub repo, here's some quick steps to do download the latest build:
+1. Click on the "Builds" folder shown on the main GitHub page.
+2. Click on the .zip file for the latest release of TF Stacker. (Would be names something like "v#-#-#.zip".)
+3. Click on the little download button shown on the top left of the area with the blue "View raw" text.
+You follow pretty much the same steps to download the .zip of the demo database.
+
+An example of a correct directory path when starting the game would be something like: "C:\Users\<User>\Documents\<DatabaseFolder>"
 
 
 
