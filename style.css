@@ -57,20 +57,51 @@ footer {
     align-items: end;
 }
 
+footer :nth-child(2) {
+    position: absolute;
+    left: 50vw;
+    transform: translateX(-50%)
+}
+
 *[title] { cursor: help; &:hover { text-decoration: 1px dotted underline } }
 
 button { padding: 0.5em 1em }
 
-li { text-align: start; padding-inline-start: 1ch }
+ol, li { text-align: start }
+ol > * { padding-inline-start: 1ch }
 
 img { -webkit-user-drag: none }
+
+hr { border: 1px solid #fff4 }
 
 
 /* Misc. classes ============================================================ */
 
 .minor { opacity: 60% }
-.disabled { opacity: 20%; filter: grayscale(1); pointer-events: none }
+.disabled { opacity: 20%; filter: grayscale(1) }
+.disabled, .disabled * { pointer-events: none }
 .clickable, button { cursor: pointer }
+
+output, li, h1, h2 h3, h4, h5, h6, hgroup, button { text-wrap: balance }
+
+i:has(img.tfButton.warningBadge)::after {
+    content: "!";
+    font-weight: bold;
+    font-style: normal;
+    color: black;
+    background: gold;
+    border: 2px solid black;
+    width: 1.2em;
+    height: 1.2em;
+    display: grid;
+    place-items: center;
+    border-radius: 100%;
+    position: relative;
+    right: 0px;
+    bottom: 100%;
+    line-height: 1;
+    pointer-events: none;
+}
 
 /* Scenes =================================================================== */
 
@@ -103,6 +134,7 @@ img { -webkit-user-drag: none }
     max-width: 80dvw;
     gap: 1.5rem;
     text-align: start;
+    justify-content: center;
 }
 
 #characters * {
@@ -140,10 +172,13 @@ img { -webkit-user-drag: none }
     justify-content: space-between;
 }
 
-#transformScene aside img.tfButton {
+#transformScene aside img.tfButton, #transformScene aside i {
     height: 7svh;
     cursor: pointer;
+    display: inline-block;
 }
+
+#transformScene nav { display: flex }
 
 #transformScene section {
     display: grid;
@@ -203,8 +238,9 @@ img { -webkit-user-drag: none }
     #characters .character:hover {
         background: #416baf;
         cursor: pointer;
+        margin: 0 1rem;
         filter: drop-shadow(2px 4px 6px #0002);
-        transform: scale(1.02) translateY(-5px);
+        transform: scale(1.00) translateY(-5px);
     }
 
     #characters .character:hover img {
@@ -214,16 +250,16 @@ img { -webkit-user-drag: none }
 
     #characters .character, #transformee { transform-origin: 50% 90% }
 
-    #transformScene aside img.tfButton { transition: 70ms }
-    #transformScene aside img.tfButton:hover  { transform: scale(1.06) }
-    #transformScene aside img.tfButton:active { transform: scale(0.93) }
+    #transformScene aside i:has(img.tfButton) { transition: 70ms }
+    #transformScene aside i:has(img.tfButton):hover  { transform: scale(1.06) }
+    #transformScene aside i:has(img.tfButton):active { transform: scale(0.93) }
 
     /* Click easter eggs */
 
     #transformScene section { perspective: 90vmax }
     #transformee { transition: 90ms ease }
 
-    #transformee[data-top-state="Normal"]:active { transform: translateY(-8px) }
+    #transformee[data-top-state="Normal"    ]:active { transform: translateY(-8px) }
     #transformee[data-top-state="Inflatable"]:active { transform: scale(1.05, 0.95) rotateX(5deg) }
-    #transformee[data-top-state="Standee"]:active { transform: rotateY(20deg) }
+    #transformee[data-top-state="Standee"   ]:active { transform: rotateY(20deg) }
 }

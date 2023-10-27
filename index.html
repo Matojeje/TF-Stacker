@@ -6,7 +6,7 @@
   <title>TF Stacker</title>
   <link rel="stylesheet" href="style.css">
   <script id="settings">
-    version = "0.1-web"
+    version = "0.2-web"
   </script>
   <script src="index.js" defer></script>
 </head>
@@ -28,9 +28,10 @@
 
       <aside>
         <p>Select character to load:</p><br>
-        <div id="characters">:3</div>
+        <div id="characters"></div>
       </aside>
 
+      <hr width="100%">
       <button type="button" onclick="switchScene('databaseScene')">
         <h3>📂 Load local database</h3>
       </button>
@@ -44,6 +45,9 @@
       <h3>Load a local database folder</h3>
 
       <ol>
+        <span>Add your own images and TF sequences here.</span> <br>
+        <span>For more info on databases, read <a href="https://github.com/EV401SALVATION/TF-Stacker/blob/main/README.md#:~:text=%5B%5D-,CREATING%20A%20DATABASE,-%5B%5D%20Creating%20a%20database">this</a>!</span>
+        <hr>
         <li>Click the file button below</li>
         <li>Navigate inside the database folder</li>
         <li>Without selecting any further files or folders, press <q>Open</q> or <q>Upload</q></li>
@@ -101,7 +105,7 @@
 <footer>
   <span id="versionText">Unknown version</span>
   <a class="minor clickable" onclick="switchScene('creditScene')">Credits</a>
-  <button type="button" onclick="exit()">Exit</button>
+  <button type="button" id="exit" onclick="exit()">Exit</button>
 </footer>
   
 <template id="dummy"></template>

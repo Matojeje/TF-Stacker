@@ -6,7 +6,7 @@ function id(id) { return document.getElementById(id) }
 /** @param {String} query @returns {HTMLElement} */ // @ts-ignore
 function $(query) { return document.querySelector(query) }
 
-/** @param {String} query */ // @ts-ignore
+/** @param {String} query @returns {NodeListOf<HTMLElement>} */ // @ts-ignore
 function $all(query) { return document.querySelectorAll(query) }
 
 
@@ -54,6 +54,10 @@ let state = []
 let currentScene = $(".scene.active")?.id ?? ""
 let previousScene = currentScene
 
+/** @type {HTMLImageElement} */ // @ts-expect-error
+const transformee = id("transformee")
+
+const placeholder = `Assets/Sprites/Image_Missing_1280.png`
 const imageFilter = /\.(a?png|jpe?g|pjp(?:eg)?|webp|avif|gif|jfif|tiff?|bmp|svg|cur)$/i
 
 const demoCharacters = [{
@@ -127,6 +131,7 @@ function switchScene(sceneID) {
     newActiveScene.classList.add("active")
 
     setupScene(ID)
+    id("exit").innerText = (currentScene == "mainMenuScene") ? "Exit" : "Menu"
 
     console.debug("Loaded scene", ID, /* newActiveScene */)
     return { previousActiveScene, newActiveScene }
@@ -136,6 +141,10 @@ function setupScene(sceneID) {
     switch (sceneID) {
         case "mainMenuScene":
             makeCharacterSelection()
+            break;
+        case "databaseScene":
+            if (!DataTransferItem.prototype.webkitGetAsEntry)
+            id("databaseStats").innerHTML = "It looks like your current browser doesn't support folder upload yet."
             break;
         case "transformScene":
             makeTransformScene()
@@ -332,18 +341,24 @@ async function makeTransformScene() {
     if (previousScene != "creditScene") state = []
     id("tfButtons").innerHTML = ""
 
-    // Set up buttons
-    char.transformations.forEach(async tf => {
+    // Generate buttons
+    char.transformations.forEach(async (tf, i) => {
         let img = document.createElement("img")
+
         img.classList.add("tfButton")
         img.dataset.state = tf
         img.draggable = false
         img.title = tf
         img.onclick = () => { state.push(tf); refreshState() }
         img.src = await readImage(char.images.button.find(x => x.name == tf)?.data)
-        id("tfButtons").appendChild(img)
+
+        let cont = document.createElement("i")
+        cont.style.order = String(i)
+        cont.appendChild(img)
+        id("tfButtons").appendChild(cont)
     })
 
+    // Update images and buttons states
     await refreshState()
 }
 
@@ -353,7 +368,7 @@ async function refreshState() {
 
     // Update character image
     const searchValue = [char.name, ...state].join("%")
-    id("transformee").src = await readImage(char.images.character.find(x => x.name == searchValue)?.data)
+    transformee.src = await readImage(char.images.character.find(x => x.name == searchValue)?.data)
 
     // Update undo button
     const undo = id("undo")
@@ -361,10 +376,17 @@ async function refreshState() {
     undo.onclick = () => { state = state.slice(0, -1); refreshState() }
 
     // Update TF buttons
-    $all("#tfButtons .tfButton").forEach(button => {
+    $all("#tfButtons .tfButton").forEach(async button => {
+        button.parentElement?.classList.remove("disabled", "warningBadge")
+
         const potentialState = [char.name, ...state, button.dataset.state].join("%")
-        const possible = char.images.character.some(x => x.name == potentialState)
-        possible ? button.classList.remove("disabled") : button.classList.add("disabled")
+        const potentialImage = char.images.character.find(x => x.name == potentialState)?.data
+
+        if (potentialImage == undefined)
+            button.parentElement?.classList.add("disabled")
+        
+        else if (typeof potentialImage == "string" && await testURL(potentialImage) == false)
+            button.parentElement?.classList.add("warningBadge")
     })
     
     // Prepare for interactions
@@ -398,10 +420,14 @@ async function loadFileLines(file) {
 }
 
 function readImage(file) {
-    return new Promise((resolve, reject) => {
-        // Simple bypass if the source is a URL
-        if (typeof file === "string") resolve(file)
-        
+    return new Promise(async (resolve, reject) => {
+        // Return URL if source is a valid URL
+        if (typeof file === "string") {
+            const isValid = await testURL(file)
+            resolve(isValid ? file : placeholder)
+            return
+        }
+
         // Error if file isn't an image
         if (file.type && !file.type.startsWith("image/"))
         reject(`File is not an image. ${file.type} ${file}`)
@@ -422,6 +448,19 @@ function partition(array, filter) {
     let pass = [], fail = []
     array.forEach((e, idx, arr) => ( filter(e, idx, arr) ? pass : fail ).push(e))
     return [pass, fail]
+}
+
+/** @param {Event} error */
+function missingImage(error) {
+    const img = error.target
+    if (img instanceof HTMLImageElement)
+    img.src = `Assets/Sprites/Image_Missing_1280.png`
+}
+
+/** @link https://stackoverflow.com/a/69689348 @param {URL | string} url */
+async function testURL(url) {
+    const response = await fetch(url)
+    return [200, 304].includes(response.status)
 }
 
 /** @link https://stackoverflow.com/a/12896858 */
